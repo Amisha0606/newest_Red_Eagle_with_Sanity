@@ -97,10 +97,11 @@ const Navbar = () => {
                 </div>
               )}
             </div>
-
-            <Button className="ml-4 bg-red-600 hover:bg-red-700 text-white">
-              Admission Enquiry
-            </Button>
+            <Link to="https://forms.gle/J8GvJ5T4XjKbaQ8J8" target="_blank">
+              <Button className="ml-4 bg-red-600 hover:bg-red-700 text-white">
+                Admission Enquiry
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -146,9 +147,11 @@ const Navbar = () => {
                 </Link>
               ))}
             </div>
-            <Button className="w-full bg-red-600 hover:bg-red-700 text-white mt-4">
-              Admission Enquiry
-            </Button>
+            <Link to="https://forms.gle/J8GvJ5T4XjKbaQ8J8" target="_blank">
+              <Button className="w-full bg-red-600 hover:bg-red-700 text-white mt-4">
+                Admission Enquiry
+              </Button>
+            </Link>
           </div>
         </div>
       )}

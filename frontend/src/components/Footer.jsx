@@ -19,7 +19,7 @@ const Footer = () => {
   ];
 
   const importantLinks = [
-    { name: "Admission", path: "/admission" },
+    { name: "Admission Enquiry", path: "https://forms.gle/J8GvJ5T4XjKbaQ8J8" },
     { name: "Fee Structure", path: "/fee-structure" },
     { name: "Rules & Regulations", path: "/rules" },
     { name: "Contact Us", path: "/contact" },
