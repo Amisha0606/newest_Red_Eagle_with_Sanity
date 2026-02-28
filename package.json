@@ -1,0 +1,11 @@
+{
+  "name": "new-redeagle-frontend-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "cd frontend && npm install && npm start",
+    "install-frontend": "cd frontend && npm install",
+    "start-frontend": "cd frontend && npm start",
+    "build-frontend": "cd frontend && npm run build"
+  }
+}
