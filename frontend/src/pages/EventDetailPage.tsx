@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import {
   ArrowLeft,
   Calendar,
@@ -7,21 +8,36 @@ import {
   Image as ImageIcon,
   X,
   Loader2,
+  Maximize2,
+  ChevronRight
 } from "lucide-react";
-import { Button } from "../components/ui/button";
 import sanityClient, { urlFor } from "../lib/sanityClient";
+import { events as mockEvents } from "../data/mockData";
+
+const fadeInUp: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
+};
+
+const staggerContainer: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
 
 const EventDetailPage = () => {
   const { eventId } = useParams();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        // Try to find by slug first, then by _id
         const query = `*[_type == "event" && (slug.current == $eventId || _id == $eventId)][0] {
           _id,
           title,
@@ -37,11 +53,19 @@ const EventDetailPage = () => {
           }
         }`;
         const result = await sanityClient.fetch(query, { eventId });
-        setEvent(result);
-        setLoading(false);
+
+        if (result) {
+          setEvent(result);
+        } else {
+          // Fallback to mock data if it matches ID/slug
+          const mockMatch = (mockEvents as any[]).find(e => e.id === eventId || e.slug === eventId);
+          setEvent(mockMatch || null);
+        }
       } catch (err) {
-        console.error("Error fetching event:", err);
-        setError(err.message);
+        console.warn("Sanity error (falling back to mock data):", err);
+        const mockMatch = (mockEvents as any[]).find(e => e.id === eventId || e.slug === eventId);
+        setEvent(mockMatch || null);
+      } finally {
         setLoading(false);
       }
     };
@@ -60,203 +84,189 @@ const EventDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-20 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-12 h-12 animate-spin text-red-600 mx-auto mb-4" />
-          <p className="text-gray-600">Loading event...</p>
-        </div>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-parchment">
+        <Loader2 className="w-16 h-16 animate-spin text-crimson mb-6" />
+        <span className="font-outfit tracking-[0.5em] text-obsidian/40 uppercase">Unpacking History...</span>
       </div>
     );
   }
 
-  if (error || !event) {
+  if (!event) {
     return (
-      <div className="min-h-screen pt-20 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-xl text-gray-600 mb-4">
-            {error ? `Error: ${error}` : "Event not found"}
-          </p>
-          <Link to="/eventGallery">
-            <Button className="bg-red-600 hover:bg-red-700">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Events
-            </Button>
-          </Link>
-        </div>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-parchment p-12 text-center">
+        <h2 className="text-4xl font-instrument font-black text-obsidian mb-8 italic opacity-20">The Archive is Missing</h2>
+        <Link to="/eventGallery">
+          <button className="h-16 px-8 bg-obsidian text-parchment font-outfit tracking-widest flex items-center gap-4 hover:bg-crimson transition-colors">
+            <ArrowLeft className="w-4 h-4" /> REVISIT THE CHRONICLES
+          </button>
+        </Link>
       </div>
     );
   }
 
   const coverImageUrl = event.coverImage
-    ? urlFor(event.coverImage).width(1920).height(600).url()
-    : null;
+    ? urlFor(event.coverImage).width(1920).height(1080).url()
+    : event.cover_image_url || "/assets/gallery/gallery1.jpg";
 
-  const galleryImages = event.gallery || [];
+  const galleryImages = event.gallery || event.images || [];
 
   return (
-    <div className="min-h-screen pt-20">
-      {/* Hero Section with Cover Image */}
-      <section className="relative h-96 overflow-hidden">
-        {coverImageUrl ? (
-          <>
-            <img
-              src={coverImageUrl}
-              alt={event.title}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30"></div>
-          </>
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-red-700"></div>
-        )}
+    <div className="bg-parchment selection:bg-crimson selection:text-white overflow-hidden pb-40">
+      {/* Immersive Hero Section */}
+      <section data-scroll-section className="relative h-[80vh] min-h-[600px] overflow-hidden">
+        <div className="absolute inset-0">
+          <img src={coverImageUrl} alt={event.title} className="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 transition-all duration-1000 scale-105" />
+          <div className="absolute inset-0 bg-gradient-to-b from-obsidian/80 via-obsidian/40 to-parchment"></div>
+        </div>
 
-        <div className="absolute inset-0 flex items-end">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 w-full">
-            <Link to="/eventGallery">
-              <Button
-                variant="outline"
-                className="mb-6 border-white text-white hover:bg-white hover:text-red-600 backdrop-blur-sm bg-white/10"
-                data-testid="back-to-events"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Events
-              </Button>
-            </Link>
-            <div className="flex items-center space-x-3 mb-4">
-              <span className="bg-red-600 text-white text-sm px-4 py-2 rounded-full capitalize font-semibold">
-                {event.category?.replace("_", " ") || "Event"}
-              </span>
+        <div className="absolute inset-0 flex items-end pb-32">
+          <div className="max-w-[1440px] mx-auto px-6 md:px-12 w-full">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
+            >
+              <Link to="/eventGallery" className="inline-flex items-center gap-4 text-gold/60 hover:text-gold transition-colors font-outfit tracking-[0.3em] text-xs mb-12 uppercase group">
+                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-2 transition-transform" /> Back to Chronicles
+              </Link>
+
+              <div className="flex items-center gap-6 mb-8">
+                <span className="h-[1px] w-12 bg-crimson"></span>
+                <span className="font-outfit text-crimson tracking-[0.4em] text-sm uppercase">Official Retrospective</span>
+              </div>
+
+              <h1 className="text-6xl md:text-[100px] font-instrument font-black text-obsidian leading-[0.9] tracking-tighter mb-12">
+                {event.title?.toUpperCase()} <br /> <span className="text-crimson italic">EXPOSURE</span>
+              </h1>
+
+              <div className="flex flex-wrap items-center gap-x-12 gap-y-6 text-obsidian/40 font-outfit tracking-widest text-xs">
+                <div className="flex items-center gap-3"><Calendar className="w-4 h-4 text-crimson" /> {formatDate(event.eventDate || event.event_date)}</div>
+                {event.location && <div className="flex items-center gap-3"><MapPin className="w-4 h-4 text-crimson" /> {event.location}</div>}
+                <div className="flex items-center gap-3"><ImageIcon className="w-4 h-4 text-crimson" /> {galleryImages.length} DEVELOPED PLATES</div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* The Narrative */}
+      <section data-scroll-section className="py-24 border-y border-obsidian/5">
+        <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
+            <div className="lg:col-span-8">
+              <p className="text-2xl md:text-3xl font-instrument text-obsidian/70 leading-relaxed italic border-l-4 border-crimson pl-8 md:pl-12">
+                {event.description}
+              </p>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-4" data-testid="event-title">
-              {event.title} Gallery
-            </h1>
-            <div className="flex flex-wrap items-center gap-4 text-white/90">
-              <span className="flex items-center">
-                <Calendar className="w-5 h-5 mr-2" />
-                {formatDate(event.eventDate)}
-              </span>
-              {event.location && (
-                <>
-                  <span>•</span>
-                  <span className="flex items-center">
-                    <MapPin className="w-5 h-5 mr-2" />
-                    {event.location}
-                  </span>
-                </>
-              )}
-              <span>•</span>
-              <span className="flex items-center">
-                <ImageIcon className="w-5 h-5 mr-2" />
-                {galleryImages.length} Photos
-              </span>
+            <div className="lg:col-span-4 flex items-center justify-end">
+              <div className="w-full h-[1px] bg-gold opacity-30"></div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Event Description */}
-      {event.description && (
-        <section className="py-8 bg-white border-b">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p className="text-lg text-gray-700 leading-relaxed">
-              {event.description}
-            </p>
-          </div>
-        </section>
-      )}
-
-      {/* Photo Gallery Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Event Highlights
-            </h2>
-            <p className="text-xl text-gray-600">
-              Memorable moments captured from {event.title}
-            </p>
-          </div>
-
+      {/* The Visual Highlights (Gallery) */}
+      <section data-scroll-section className="py-24">
+        <div className="max-w-[1440px] mx-auto px-6 md:px-12">
           {galleryImages.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-2xl shadow-lg">
-              <ImageIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-xl text-gray-600">No photos available yet</p>
-              <p className="text-gray-500 mt-2">Photos will be added soon</p>
+            <div className="text-center py-40 bg-white/50 border border-dashed border-obsidian/10">
+              <h3 className="text-3xl font-instrument font-black text-obsidian/20 italic">No Visual Evidence Found</h3>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <motion.div
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12"
+            >
               {galleryImages.map((item, idx) => {
                 const imageUrl = item.image
-                  ? urlFor(item.image).width(800).height(600).url()
-                  : null;
+                  ? urlFor(item.image).width(800).height(1000).url()
+                  : item.url || item; // Mock data might be strings
 
-                if (!imageUrl) return null;
+                const fullUrl = item.image
+                  ? urlFor(item.image).width(1920).url()
+                  : item.url || item;
 
                 return (
-                  <div
+                  <motion.div
                     key={idx}
-                    className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer"
-                    onClick={() => setSelectedImage({ ...item, url: urlFor(item.image).width(1920).url() })}
-                    data-testid={`gallery-image-${idx}`}
+                    variants={fadeInUp}
+                    className="relative group aspect-[3/4] overflow-hidden cursor-crosshair bg-obsidian"
+                    onClick={() => setSelectedImage({ ...item, url: fullUrl })}
                   >
-                    <div className="relative h-80 overflow-hidden">
-                      <img
-                        src={imageUrl}
-                        alt={item.caption || `${event.title} - Photo ${idx + 1}`}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                          {item.caption && (
-                            <p className="text-sm font-medium">{item.caption}</p>
-                          )}
-                          <p className="text-xs text-white/80 mt-2">
-                            Click to view full size
-                          </p>
+                    <img
+                      src={imageUrl}
+                      alt={item.caption || "Gallery Image"}
+                      className="w-full h-full object-cover filter brightness-75 group-hover:brightness-100 group-hover:scale-105 transition-all duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-obsidian/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500">
+                      <div className="absolute bottom-8 left-8 right-8 text-parchment">
+                        <h4 className="font-outfit tracking-[0.2em] text-xs text-gold mb-2 uppercase">Plate No. {idx + 1}</h4>
+                        <p className="font-instrument italic text-lg line-clamp-2">
+                          {item.caption || "An unspoken moment of institutional pride."}
+                        </p>
+                        <div className="mt-6 flex items-center gap-2 opacity-60">
+                          <Maximize2 className="w-4 h-4" /> <span className="text-[10px] font-outfit tracking-widest">EXPAND FRAME</span>
                         </div>
                       </div>
                     </div>
-                    <div className="absolute top-4 left-4 bg-red-600 text-white text-xs px-3 py-1 rounded-full font-semibold">
-                      Photo {idx + 1}
-                    </div>
-                  </div>
+                  </motion.div>
                 );
               })}
-            </div>
+            </motion.div>
           )}
         </div>
       </section>
 
-      {/* Image Lightbox Modal */}
-      {selectedImage && (
-        <div
-          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4"
-          onClick={() => setSelectedImage(null)}
-          data-testid="lightbox-modal"
-        >
-          <button
+      {/* Cinematic Modal (Lightbox) */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-obsidian/95 z-[100] flex items-center justify-center p-8 md:p-24 backdrop-blur-xl"
             onClick={() => setSelectedImage(null)}
-            className="absolute top-4 right-4 text-white hover:text-red-500 transition-colors duration-200"
-            data-testid="close-lightbox"
           >
-            <X className="w-8 h-8" />
-          </button>
-          <div className="max-w-6xl max-h-full flex flex-col items-center">
-            <img
-              src={selectedImage.url}
-              alt={selectedImage.caption || event.title}
-              className="max-w-full max-h-[80vh] object-contain rounded-lg"
-            />
-            {selectedImage.caption && (
-              <div className="mt-6 text-center">
-                <p className="text-white text-lg font-medium">
-                  {selectedImage.caption}
+            <button className="absolute top-12 right-12 text-parchment/40 hover:text-crimson transition-colors group">
+              <X className="w-12 h-12 group-hover:rotate-90 transition-transform" />
+            </button>
+            <div className="relative max-w-7xl w-full h-full flex flex-col md:flex-row items-center gap-12 pointer-events-none">
+              <div className="w-full md:w-2/3 h-full flex items-center justify-center pointer-events-auto">
+                <img
+                  src={selectedImage.url}
+                  alt={selectedImage.caption || event.title}
+                  className="max-w-full max-h-full object-contain shadow-[0_0_100px_rgba(0,0,0,0.5)] border border-white/5"
+                />
+              </div>
+              <div className="w-full md:w-1/3 flex flex-col justify-center text-left pointer-events-auto">
+                <h5 className="font-outfit text-crimson tracking-[0.5em] mb-6">Plate Specification</h5>
+                <p className="text-3xl md:text-5xl font-instrument font-black text-parchment leading-tight mb-8 italic">
+                  {selectedImage.caption || "A singular moment etched in the institutional memory."}
+                </p>
+                <div className="h-[1px] w-24 bg-gold mb-8"></div>
+                <p className="text-parchment/40 font-inter text-sm leading-relaxed max-w-sm">
+                  Part of the {event.title} archives. Authorized for academic and archival use only.
                 </p>
               </div>
-            )}
-          </div>
-        </div>
-      )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Bottom Nav */}
+      <section data-scroll-section className="pt-24 pb-40 text-center">
+        <Link to="/eventGallery">
+          <button className="group flex flex-col items-center gap-6 mx-auto">
+            <div className="w-16 h-16 rounded-full border border-obsidian/10 flex items-center justify-center group-hover:bg-crimson group-hover:border-crimson transition-all duration-500">
+              <ChevronRight className="w-6 h-6 group-hover:translate-x-1 group-hover:text-white transition-all" />
+            </div>
+            <span className="font-outfit tracking-[0.4em] text-xs text-obsidian px-8 py-3 border border-obsidian group-hover:bg-obsidian group-hover:text-parchment transition-all duration-500">REVISIT ALL CHRONICLES</span>
+          </button>
+        </Link>
+      </section>
     </div>
   );
 };
