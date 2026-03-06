@@ -81,8 +81,8 @@ This will give you a URL like: `https://red-eagle-group.sanity.studio`
    - Add student details with photos
 
 ## Sanity Project Details
-- **Project ID**: `iodmv8av`
-- **Dataset**: `red_eagle_sanity`
+- **Project ID**: `xacqk9il`
+- **Dataset**: `production`
 
 ## Local Development
 
