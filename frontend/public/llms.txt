@@ -1,0 +1,20 @@
+# Red Eagle Group of Institutions
+
+A premium school website built with React, Vite, Tailwind CSS, and Sanity CMS.
+
+## Core Pages
+- Home: Overview of the school, hero section, facilities preview, and FAQ.
+- About: Detailed history and mission of R.E.P.S.
+- Facilities: Showcase of infrastructure, labs, and library.
+- Events: Gallery of school events like Annual Function, Sports Day, etc.
+- Toppers: Academic achievements and toppers showcase.
+- Contact: Admission enquiry and campus location.
+
+## Technology Stack
+- Frontend: React 18, Vite, Tailwind CSS, Shadcn UI, Lucide Icons.
+- CMS: Sanity.io for dynamic content management.
+- SEO: Optimized with sitemap.xml, robots.txt, and structured data.
+
+## Deployment Information
+- Site URL: https://redeaglepublicschool.com/
+- CMS Dashboard: Located in the /studio directory.
