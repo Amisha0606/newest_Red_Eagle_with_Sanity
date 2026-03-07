@@ -14,13 +14,9 @@ module.exports = {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			fontFamily: {
-				playfair: ['"Space Mono"', 'monospace'],
-				sora: ['"Inter"', 'sans-serif'],
-				bebas: ['"Outfit"', 'sans-serif'],
-				outfit: ['"Outfit"', 'sans-serif'],
-				instrument: ['"Space Mono"', 'monospace'],
-				inter: ['"Inter"', 'sans-serif'],
-				mono: ['"Space Mono"', 'monospace'],
+				playfair: ['"Playfair Display"', 'serif'],
+				sora: ['"Sora"', 'sans-serif'],
+				bebas: ['"Bebas Neue"', 'cursive'],
 			},
 			colors: {
 				background: 'hsl(var(--background))',
