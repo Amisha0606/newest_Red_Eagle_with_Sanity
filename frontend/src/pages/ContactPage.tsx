@@ -49,31 +49,31 @@ const ContactPage = () => {
                         <Input placeholder="Enter last name" className="h-12" />
                       </div>
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">
                         Email Address
                       </label>
                       <Input type="email" placeholder="your.email@example.com" className="h-12" />
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">
                         Phone Number
                       </label>
                       <Input type="tel" placeholder="+91 XXXXX XXXXX" className="h-12" />
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">
                         Message
                       </label>
-                      <Textarea 
+                      <Textarea
                         placeholder="Tell us how we can help you..."
                         className="min-h-32"
                       />
                     </div>
-                    
+
                     <Button className="w-full bg-red-600 hover:bg-red-700 text-white h-12 text-lg">
                       Send Message
                       <Send className="ml-2 w-5 h-5" />
@@ -183,7 +183,7 @@ const ContactPage = () => {
               width="100%"
               height="100%"
               style={{ border: 0 }}
-              allowFullScreen=""
+              allowFullScreen={true}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               title="Red Eagle Public School Location"
