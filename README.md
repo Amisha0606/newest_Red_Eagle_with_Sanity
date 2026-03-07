@@ -1,120 +1,84 @@
-# Red Eagle Group of Institutions - Website
+# Red Eagle Group of Institutions
 
-A professional school website built with React and Sanity CMS.
+A modern, high-performance school website built with **React**, **Vite**, **Tailwind CSS**, and **Sanity CMS**.
 
-## Tech Stack
-- **Frontend**: React 18 + TailwindCSS + shadcn/ui
-- **CMS**: Sanity (headless CMS for content management)
-- **Deployment**: Ready for Vercel
+## 🚀 Project Overview
 
-## Project Structure
-```
-/app
-├── frontend/          # React frontend application
-│   ├── src/
-│   │   ├── pages/     # Page components
-│   │   ├── components/# UI components
-│   │   └── lib/       # Sanity client config
-│   └── package.json
-├── studio/            # Sanity Studio (CMS admin)
-│   ├── schemaTypes/   # Content schemas
-│   └── sanity.config.ts
-└── vercel.json        # Vercel deployment config
-```
+This project is a complete digital transformation for Red Eagle Group of Institutions. It features a premium, responsive frontend and a powerful headless CMS (Sanity) for dynamic content management (events, toppers, facilities, etc.).
 
-## Sanity Schemas
+### Key Features
+- **Dynamic Content**: Managed via Sanity.io.
+- **Premium Design**: Modern aesthetic, glassmorphism, and smooth animations.
+- **SEO Optimized**: Includes `sitemap.xml`, `robots.txt`, and AI-friendly `llms.txt`.
+- **Responsive**: Fully optimized for mobile, tablet, and desktop.
+- **Real Assets**: Integrated actual school project images for gallery, leadership, and facilities.
 
-### 1. Events (`event`)
-- **title**: Event name
-- **slug**: URL-friendly identifier
-- **eventDate**: Date of the event
-- **category**: annual_function, sports, cultural, academic, ceremony, competition
-- **description**: Event details
-- **location**: Where the event was held
-- **coverImage**: Main image for event listing
-- **gallery**: Array of images with captions
+---
 
-### 2. Toppers (`toppers`)
-- **section**: primary, middle, secondary, senior
-- **classNumber**: 1-12
-- **academicYear**: e.g., "2025-26"
-- **students**: Array of student records
-  - name, photo, percentage, stream, rank
+## 📂 Project Structure
 
-## Deployment Guide
+- `/frontend`: The React application built with Vite.
+- `/studio`: The Sanity CMS configuration and studio.
+- `/public/assets`: Organized real-world school assets and branding.
 
-### Step 1: Deploy Sanity Studio
-```bash
-cd studio
-npm install
-npx sanity deploy
-```
-This will give you a URL like: `https://red-eagle-group.sanity.studio`
+---
 
-### Step 2: Deploy Frontend to Vercel
+## 🛠️ Getting Started
 
-1. **Push to GitHub** (if not already)
+### Prerequisites
+- Node.js (v18+)
+- npm or yarn
 
-2. **Import to Vercel**:
-   - Go to [vercel.com](https://vercel.com)
-   - Click "New Project" → Import your repository
-   - Configure:
-     - Framework Preset: `Other`
-     - Root Directory: `frontend`
-     - Build Command: `yarn build`
-     - Output Directory: `build`
+### Installation
 
-3. **No environment variables needed** - Sanity config is embedded
+1. **Clone the repository**
+2. **Setup Frontend:**
+   ```bash
+   cd frontend
+   npm install
+   ```
+3. **Setup Studio:**
+   ```bash
+   cd studio
+   npm install
+   ```
 
-### Step 3: Add Content in Sanity
+---
 
-1. Go to your Sanity Studio URL
-2. **Add Events**:
-   - Click "Event" → Create new
-   - Fill in title, date, category
-   - Upload cover image
-   - Add gallery images
-3. **Add Toppers**:
-   - Click "Toppers" → Create new
-   - Select section (Primary/Middle/Secondary/Senior)
-   - Select class number
-   - Add student details with photos
+## 💻 Development Commands
 
-## Sanity Project Details
-- **Project ID**: `iodmv8av`
-- **Dataset**: `red_eagle_sanity`
-
-## Local Development
-
-### Frontend
-```bash
-cd frontend
-yarn install
-yarn start
-```
+### Frontend (React + Vite)
+Inside the `frontend` directory:
+- `npm run dev`: Start the development server (Vite).
+- `npm run build`: Build for production.
+- `npm run preview`: Preview the production build.
 
 ### Sanity Studio
-```bash
-cd studio
-npm install
-npm run dev
-```
+Inside the `studio` directory:
+- `npx sanity dev`: Start the local CMS studio.
+- `npx sanity deploy`: Deploy the studio to Sanity's cloud.
+- `npx sanity gql-deploy`: Deploy GraphQL API.
 
-## Custom Domain Setup (After Vercel Deployment)
+---
 
-1. Go to Vercel Project → Settings → Domains
-2. Add your custom domain (e.g., `www.redeagleschool.com`)
-3. Update DNS records as instructed by Vercel
-4. SSL certificate is auto-provisioned
+## 📈 SEO & AI Integration
 
-## Pages
-- `/` - Home
-- `/about` - About the institution
-- `/facilities` - School facilities
-- `/eventGallery` - Events list (from Sanity)
-- `/eventGallery/:slug` - Event details with photo gallery
-- `/toppers` - Student achievements (from Sanity)
-- `/rules` - School rules
-- `/fee-structure` - Fee information
-- `/contact` - Contact page with map
-- `/bhopatpur` - Coming soon branch page
+- **Sitemap**: `/public/sitemap.xml` - Automatically indexed by search engines.
+- **Robots**: `/public/robots.txt` - Controls crawler access.
+- **LLMs Context**: `/public/llms.txt` - Provides structured context for AI models (ChatGPT, Claude, etc.) to understand the site structure.
+
+---
+
+## 🖼️ Media & Assets
+
+Assets are organized in `frontend/public/assets/` by category:
+- `branding/`: Logo and identity.
+- `school/`: Campus and infrastructure photos.
+- `gallery/`: Event and activity photos.
+- `toppers/`: Academic achievers.
+- `facilities/`: Iconography and site vectors.
+
+---
+
+## 📝 License
+Proprietary - Red Eagle Group of Institutions.

@@ -1,9 +1,9 @@
 // Script to seed sample toppers data
-import sanityClient from '@sanity/client'
+import { createClient } from '@sanity/client'
 
-const client = sanityClient({
-  projectId: 'iodmv8av',
-  dataset: 'red_eagle_sanity',
+const client = createClient({
+  projectId: 'xacqk9il',
+  dataset: 'production',
   token: process.env.SANITY_AUTH_TOKEN,
   useCdn: false,
   apiVersion: '2025-01-01',
@@ -15,7 +15,7 @@ const sampleToppersPage = {
   description: 'Celebrating academic excellence and outstanding achievements of our students across all classes',
   groups: [
     {
-      groupName: 'Primary (1-5)',
+      groupName: 'primary',
       classes: [
         {
           classNumber: '1',
@@ -55,7 +55,7 @@ const sampleToppersPage = {
       ],
     },
     {
-      groupName: 'Middle (6-8)',
+      groupName: 'middle',
       classes: [
         {
           classNumber: '6',
@@ -75,7 +75,7 @@ const sampleToppersPage = {
       ],
     },
     {
-      groupName: 'Secondary (9-10)',
+      groupName: 'secondary',
       classes: [
         {
           classNumber: '9',
@@ -95,7 +95,7 @@ const sampleToppersPage = {
       ],
     },
     {
-      groupName: 'Senior (11-12)',
+      groupName: 'senior',
       classes: [
         {
           classNumber: '11',
@@ -114,6 +114,7 @@ const sampleToppersPage = {
         },
       ],
     },
+
   ],
 }
 
@@ -121,7 +122,7 @@ async function createSampleData() {
   try {
     // Check if document already exists
     const existing = await client.fetch('*[_type == "toppersPage"][0]')
-    
+
     if (existing) {
       console.log('Updating existing toppers page...')
       const updated = await client.patch(existing._id).set(sampleToppersPage).commit()

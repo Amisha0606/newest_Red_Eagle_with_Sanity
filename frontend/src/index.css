@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Sora:wght@100..800&family=Bebas+Neue&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:ital,slnt,wght@0,0..10,100..900;1,0..10,100..900&family=Outfit:wght@100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
 body {
     margin: 0;
     font-family:
@@ -43,8 +46,9 @@ code {
         --chart-3: 197 37% 24%;
         --chart-4: 43 74% 66%;
         --chart-5: 27 87% 67%;
-        --radius: 0.5rem;
+        --radius: 1rem;
     }
+
     .dark {
         --background: 0 0% 3.9%;
         --foreground: 0 0% 98%;
@@ -77,6 +81,7 @@ code {
     * {
         @apply border-border;
     }
+
     body {
         @apply bg-background text-foreground;
     }
@@ -87,7 +92,7 @@ code {
         display: contents !important;
     }
 
-    [data-debug-wrapper="true"] > * {
+    [data-debug-wrapper="true"]>* {
         margin-left: inherit;
         margin-right: inherit;
         margin-top: inherit;

@@ -58,8 +58,8 @@ Build a professional website for "Red Eagle Group of Institutions" - a school we
 - ✅ Sanity schemas simplified for Toppers & Events
 
 ## Sanity Project
-- Project ID: `iodmv8av`
-- Dataset: `red_eagle_sanity`
+- Project ID: `xacqk9il`
+- Dataset: `production`
 
 ## Backlog / Future Tasks
 ### P1 (High Priority)
