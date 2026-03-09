@@ -1,20 +1,74 @@
-import React from 'react';
-import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
-import { Button } from '../components/ui/button';
-import { Card, CardContent } from '../components/ui/card';
-import { Input } from '../components/ui/input';
-import { Textarea } from '../components/ui/textarea';
+import React, { useEffect, useState } from "react";
+import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { Card, CardContent } from "../components/ui/card";
+import client from "../lib/sanityClient";
+
+interface Branch {
+  _id: string;
+  name: string;
+  address: string;
+  contactNumbers?: {
+    officeIncharge?: string;
+    transportIncharge?: string;
+  };
+  email?: string;
+  officeHours?: {
+    summer?: string;
+    winter?: string;
+    sunday?: string;
+  };
+  mapEmbedUrl?: string;
+  googleMapsLink?: string;
+}
 
 const ContactPage = () => {
+  const [branches, setBranches] = useState<Branch[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBranches = async () => {
+      try {
+        const query = `*[_type == "branch"] | order(visibilityOrder asc) {
+          _id,
+          name,
+          address,
+          contactNumbers,
+          email,
+          officeHours,
+          mapEmbedUrl,
+          googleMapsLink
+        }`;
+        const data = await client.fetch(query);
+        setBranches(data);
+      } catch (error) {
+        console.error("Error fetching branches:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBranches();
+  }, []);
+
+  // helper to split comma-separated values (emails/numbers)
+  const splitComma = (text?: string) => {
+    if (!text) return [];
+    return text.split(",").map((t) => t.trim());
+  };
+
   return (
     <div className="min-h-screen pt-20">
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-br from-red-600 to-red-700 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'radial-gradient(circle at 20px 20px, white 2px, transparent 0)',
-            backgroundSize: '40px 40px'
-          }}></div>
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 20px 20px, white 2px, transparent 0)",
+              backgroundSize: "40px 40px",
+            }}
+          ></div>
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Mail className="w-16 h-16 mx-auto mb-6" />
@@ -25,182 +79,176 @@ const ContactPage = () => {
         </div>
       </section>
 
-      {/* Contact Form & Info */}
-      <section className="py-16 bg-gray-50">
+      {/* Office Hours */}
+      <section className="py-8 bg-red-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Contact Form */}
-            <div>
-              <Card className="border-none shadow-xl">
-                <CardContent className="p-8">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-6">Send us a Message</h2>
-                  <form className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                          First Name
-                        </label>
-                        <Input placeholder="Enter first name" className="h-12" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                          Last Name
-                        </label>
-                        <Input placeholder="Enter last name" className="h-12" />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Email Address
-                      </label>
-                      <Input type="email" placeholder="your.email@example.com" className="h-12" />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Phone Number
-                      </label>
-                      <Input type="tel" placeholder="+91 XXXXX XXXXX" className="h-12" />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Message
-                      </label>
-                      <Textarea
-                        placeholder="Tell us how we can help you..."
-                        className="min-h-32"
-                      />
-                    </div>
-
-                    <Button className="w-full bg-red-600 hover:bg-red-700 text-white h-12 text-lg">
-                      Send Message
-                      <Send className="ml-2 w-5 h-5" />
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Contact Information */}
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-6">Contact Information</h2>
-                <p className="text-gray-600 text-lg mb-8">
-                  Feel free to reach out to us through any of the following channels. We're here to help!
-                </p>
+          <Card className="border-red-200 bg-white">
+            <CardContent className="p-6">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Clock className="w-6 h-6 text-red-600" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">
+                    Office Hours
+                  </h3>
+                  <div className="space-y-1 text-gray-600">
+                    <p>
+                      The school office operates from <b>9:00 AM</b> to{" "}
+                      <b>1:00 PM </b>
+                      throughout the year, regardless of the season. The school
+                      office remains closed on Sundays.
+                    </p>
+                  </div>
+                </div>
               </div>
-
-              <Card className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <CardContent className="p-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <MapPin className="w-6 h-6 text-red-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-900 mb-1">Main Campus Address</h3>
-                      <p className="text-gray-600">
-                        Red Eagle Public School<br />
-                        Main Campus, City<br />
-                        State, PIN Code
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <CardContent className="p-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Phone className="w-6 h-6 text-red-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-900 mb-1">Phone Numbers</h3>
-                      <p className="text-gray-600">
-                        Main: +91 8400773055<br />
-                        Admissions: +91 XXXXX XXXXX<br />
-                        Office: +91 XXXXX XXXXX
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <CardContent className="p-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Mail className="w-6 h-6 text-red-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-900 mb-1">Email Addresses</h3>
-                      <p className="text-gray-600">
-                        General: info@redeaglepublicschool.com<br />
-                        Admissions: admissions@redeaglepublicschool.com<br />
-                        Principal: principal@redeaglepublicschool.com
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <CardContent className="p-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Clock className="w-6 h-6 text-red-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-900 mb-1">Office Hours</h3>
-                      <p className="text-gray-600">
-                        Monday - Friday: 8:00 AM - 4:00 PM<br />
-                        Saturday: 8:00 AM - 1:00 PM<br />
-                        Sunday: Closed
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
-      {/* Map Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Find Us on Map</h2>
-            <p className="text-xl text-gray-600">
-              Visit our campus and experience the environment yourself
-            </p>
-          </div>
-          <div className="rounded-2xl overflow-hidden shadow-xl h-96">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3558.0123456789!2d80.123456!3d26.123456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjbCsDA3JzI0LjQiTiA4MMKwMDcnMjQuNCJF!5e0!3m2!1sen!2sin!4v1234567890"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen={true}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Red Eagle Public School Location"
-            ></iframe>
-          </div>
-          <div className="text-center mt-6">
-            <a
-              href="https://maps.app.goo.gl/2pwvpUdPanC9EThs9"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block"
-            >
-              <Button className="bg-red-600 hover:bg-red-700 text-white">
-                Open in Google Maps
-              </Button>
-            </a>
-          </div>
+      {/* Branches Contact Information */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
+          {loading ? (
+            <div className="text-center py-12">
+              <p className="text-gray-600 text-lg">
+                Loading branch information...
+              </p>
+            </div>
+          ) : branches.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-600 text-lg">
+                No branch information available
+              </p>
+            </div>
+          ) : (
+            branches.map((branch, index) => (
+              <div key={branch._id}>
+                {/* Branch Header */}
+                <div className="mb-12">
+                  <h2 className="text-4xl font-bold text-gray-900 mb-2">
+                    {branch.name}
+                  </h2>
+                  <div className="h-1 w-20 bg-red-600"></div>
+                </div>
+
+                {/* Branch Contact & Map Layout */}
+                <div className="grid lg:grid-cols-2 gap-12">
+                  {/* Contact Information - Left Side */}
+                  <div className="space-y-6">
+                    {/* Address */}
+                    {branch.address && (
+                      <Card className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <CardContent className="p-6">
+                          <div className="flex items-start space-x-4">
+                            <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <MapPin className="w-6 h-6 text-red-600" />
+                            </div>
+                            <div>
+                              <h3 className="font-bold text-gray-900 mb-1">
+                                Postal Address
+                              </h3>
+                              <p className="text-gray-600 whitespace-pre-line">
+                                {branch.address}
+                              </p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    {/* Contact Numbers */}
+                    {(branch.contactNumbers?.officeIncharge ||
+                      branch.contactNumbers?.transportIncharge) && (
+                      <Card className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <CardContent className="p-6">
+                          <div className="flex items-start space-x-4">
+                            <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <Phone className="w-6 h-6 text-red-600" />
+                            </div>
+                            <div>
+                              <h3 className="font-bold text-gray-900 mb-1">
+                                Contact Numbers
+                              </h3>
+                              <div className="space-y-1 text-gray-600">
+                                {branch.contactNumbers?.officeIncharge && (
+                                  <p>
+                                    Office Incharge:{" "}
+                                    {branch.contactNumbers.officeIncharge}
+                                  </p>
+                                )}
+                                {branch.contactNumbers?.transportIncharge && (
+                                  <p>
+                                    Transport Incharge:{" "}
+                                    {branch.contactNumbers.transportIncharge}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    {/* Email */}
+                    {branch.email && (
+                      <Card className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <CardContent className="p-6">
+                          <div className="flex items-start space-x-4">
+                            <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <Mail className="w-6 h-6 text-red-600" />
+                            </div>
+                            <div>
+                              <h3 className="font-bold text-gray-900 mb-1">
+                                Email Address
+                              </h3>
+                              <div className="text-gray-600 space-y-1">
+                                {splitComma(branch.email).map((e, i) => (
+                                  <a
+                                    key={i}
+                                    href={`mailto:${e}`}
+                                    className="block hover:text-red-600"
+                                  >
+                                    {e}
+                                  </a>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+
+                  {/* Map - Right Side */}
+                  <div className="space-y-4">
+                    {branch.googleMapsLink ? (
+                      <div className="rounded-2xl overflow-hidden shadow-xl h-96">
+                        <iframe
+                          src={branch.googleMapsLink}
+                          width="100%"
+                          height="100%"
+                          style={{ border: 0 }}
+                          allowFullScreen
+                          loading="lazy"
+                          referrerPolicy="no-referrer-when-downgrade"
+                          title={`${branch.name} Location`}
+                        ></iframe>
+                      </div>
+                    ) : (
+                      <p className="text-gray-500">Map not available</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Divider between branches */}
+                {index < branches.length - 1 && (
+                  <div className="my-16 border-t-2 border-gray-300"></div>
+                )}
+              </div>
+            ))
+          )}
         </div>
       </section>
     </div>

@@ -26,7 +26,7 @@ const EventDetailPage = () => {
           _id,
           title,
           slug,
-          eventDate,
+          date,
           category,
           description,
           location,
@@ -127,13 +127,16 @@ const EventDetailPage = () => {
                 {event.category?.replace("_", " ") || "Event"}
               </span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-4" data-testid="event-title">
+            <h1
+              className="text-5xl md:text-6xl font-bold text-white mb-4"
+              data-testid="event-title"
+            >
               {event.title} Gallery
             </h1>
             <div className="flex flex-wrap items-center gap-4 text-white/90">
               <span className="flex items-center">
                 <Calendar className="w-5 h-5 mr-2" />
-                {formatDate(event.eventDate)}
+                {formatDate(event.date)}
               </span>
               {event.location && (
                 <>
@@ -196,19 +199,28 @@ const EventDetailPage = () => {
                   <div
                     key={idx}
                     className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer"
-                    onClick={() => setSelectedImage({ ...item, url: urlFor(item.image).width(1920).url() })}
+                    onClick={() =>
+                      setSelectedImage({
+                        ...item,
+                        url: urlFor(item.image).width(1920).url(),
+                      })
+                    }
                     data-testid={`gallery-image-${idx}`}
                   >
                     <div className="relative h-80 overflow-hidden">
                       <img
                         src={imageUrl}
-                        alt={item.caption || `${event.title} - Photo ${idx + 1}`}
+                        alt={
+                          item.caption || `${event.title} - Photo ${idx + 1}`
+                        }
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                           {item.caption && (
-                            <p className="text-sm font-medium">{item.caption}</p>
+                            <p className="text-sm font-medium">
+                              {item.caption}
+                            </p>
                           )}
                           <p className="text-xs text-white/80 mt-2">
                             Click to view full size

@@ -48,7 +48,9 @@ const ToppersPage = () => {
 
   // Get toppers for current section
   const currentSection = sections.find((s) => s.id === selectedSection);
-  const sectionToppers = toppersData.filter((t) => t.section === selectedSection);
+  const sectionToppers = toppersData.filter(
+    (t) => t.section === selectedSection,
+  );
 
   // Get toppers for a specific class
   const getToppersForClass = (classNum) => {
@@ -136,7 +138,9 @@ const ToppersPage = () => {
                   {topper.percentage}%
                 </span>
                 {topper.rank && (
-                  <span className="text-sm text-gray-500">Rank #{topper.rank}</span>
+                  <span className="text-sm text-gray-500">
+                    Rank #{topper.rank}
+                  </span>
                 )}
               </div>
             </div>
@@ -198,7 +202,8 @@ const ToppersPage = () => {
             <div className="text-center py-12 bg-white rounded-2xl shadow-lg">
               <Trophy className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <p className="text-xl text-gray-600">
-                No toppers data available for {currentSection?.title} section yet.
+                No toppers data available for {currentSection?.title} section
+                yet.
               </p>
               <p className="text-gray-500 mt-2">
                 Data will appear here once added in Sanity CMS
@@ -223,8 +228,8 @@ const ToppersPage = () => {
                           selectedClass === classNum
                             ? "bg-red-600 text-white shadow-lg"
                             : hasData
-                            ? "bg-white text-gray-700 hover:bg-red-50 border-2 border-gray-200"
-                            : "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
+                              ? "bg-white text-gray-700 hover:bg-red-50 border-2 border-gray-200"
+                              : "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
                         }`}
                         disabled={!hasData}
                       >

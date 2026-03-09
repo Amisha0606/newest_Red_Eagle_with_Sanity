@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Calendar, MapPin, Image as ImageIcon, ArrowRight, Loader2 } from "lucide-react";
+import {
+  Calendar,
+  MapPin,
+  Image as ImageIcon,
+  ArrowRight,
+  Loader2,
+} from "lucide-react";
 import { Card, CardContent } from "../components/ui/card";
 import sanityClient, { urlFor } from "../lib/sanityClient";
 
@@ -13,11 +19,11 @@ const EventsListPage = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const query = `*[_type == "event"] | order(eventDate desc) {
+        const query = `*[_type == "event"] | order(date desc) {
           _id,
           title,
           slug,
-          eventDate,
+          date,
           category,
           description,
           location,
@@ -51,12 +57,11 @@ const EventsListPage = () => {
 
   const categories = [
     { value: "all", label: "All Events" },
-    { value: "annual_function", label: "Annual Function" },
+    { value: "annual", label: "Annual Event" },
     { value: "sports", label: "Sports" },
-    { value: "cultural", label: "Cultural" },
+    { value: "competitions", label: "Competitions" },
     { value: "academic", label: "Academic" },
-    { value: "ceremony", label: "Ceremony" },
-    { value: "competition", label: "Competition" },
+    { value: "others", label: "Others" },
   ];
 
   if (loading) {
@@ -130,9 +135,6 @@ const EventsListPage = () => {
             <div className="text-center py-12">
               <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <p className="text-xl text-gray-600">No events found</p>
-              <p className="text-gray-500 mt-2">
-                Events will appear here once added in Sanity CMS
-              </p>
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -143,7 +145,11 @@ const EventsListPage = () => {
                   : null;
 
                 return (
-                  <Link key={event._id} to={`/eventGallery/${eventSlug}`} data-testid={`event-card-${eventSlug}`}>
+                  <Link
+                    key={event._id}
+                    to={`/eventGallery/${eventSlug}`}
+                    data-testid={`event-card-${eventSlug}`}
+                  >
                     <Card className="group hover:shadow-2xl transition-all duration-300 border-none overflow-hidden hover:-translate-y-2 cursor-pointer">
                       {coverImageUrl ? (
                         <div className="relative h-64 overflow-hidden">
@@ -164,7 +170,7 @@ const EventsListPage = () => {
                             </h3>
                             <div className="flex items-center text-sm text-red-100">
                               <Calendar className="w-4 h-4 mr-2" />
-                              {formatDate(event.eventDate)}
+                              {formatDate(event.date)}
                             </div>
                           </div>
                         </div>
@@ -181,7 +187,7 @@ const EventsListPage = () => {
                               {event.title}
                             </h3>
                             <p className="text-red-100">
-                              {formatDate(event.eventDate)}
+                              {formatDate(event.date)}
                             </p>
                           </div>
                         </div>

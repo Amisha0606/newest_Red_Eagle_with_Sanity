@@ -5,12 +5,15 @@ import {
   Mail,
   MapPin,
   Facebook,
-  Twitter,
+  Linkedin,
   Instagram,
   Youtube,
 } from "lucide-react";
+import { useBranding } from "../hooks/useBranding";
 
 const Footer = () => {
+  const { branding } = useBranding();
+
   const quickLinks = [
     { name: "About Us", path: "/about" },
     { name: "Facilities", path: "/facilities" },
@@ -22,6 +25,7 @@ const Footer = () => {
     { name: "Admission Enquiry", path: "https://forms.gle/J8GvJ5T4XjKbaQ8J8" },
     { name: "Fee Structure", path: "/fee-structure" },
     { name: "Rules & Regulations", path: "/rules" },
+    { name: "Public Disclosure", path: "/public-disclosure" },
     { name: "Contact Us", path: "/contact" },
   ];
 
@@ -32,13 +36,23 @@ const Footer = () => {
           {/* About Section */}
           <div>
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">RE</span>
-              </div>
+              {branding?.logoImage?.asset?.url ? (
+                <img
+                  src={branding.logoImage.asset.url}
+                  alt={branding.altText || "School Logo"}
+                  className="w-12 h-12 rounded-full object-contain bg-white"
+                />
+              ) : (
+                <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-xl">RE</span>
+                </div>
+              )}
               <div>
-                <div className="text-lg font-bold text-white">Red Eagle</div>
+                <div className="text-lg font-bold text-white">
+                  {branding?.schoolShortName || "Red Eagle"}
+                </div>
                 <div className="text-xs text-red-400">
-                  Group of Institutions
+                  {branding?.tagline || "Group of Institutions"}
                 </div>
               </div>
             </div>
@@ -48,28 +62,42 @@ const Footer = () => {
             </p>
             <div className="flex space-x-3">
               <a
-                href="#"
+                href="https://www.facebook.com/RedEaglePublicSchool"
                 className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors duration-300"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Visit Red Eagle Public School
+                Facebook page"
               >
                 <Facebook className="w-4 h-4" />
               </a>
+
               <a
-                href="#"
+                href="https://www.instagram.com/reps_saidabad/"
                 className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors duration-300"
-              >
-                <Twitter className="w-4 h-4" />
-              </a>
-              <a
-                href="#"
-                className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors duration-300"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Visit Red Eagle Public School Instagram page"
               >
                 <Instagram className="w-4 h-4" />
               </a>
               <a
-                href="#"
+                href="https://www.youtube.com/@RedEaglePublicSchoolSaidabad"
                 className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors duration-300"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Visit Red Eagle Public School YouTube channel"
               >
                 <Youtube className="w-4 h-4" />
+              </a>
+              <a
+                href="https://www.linkedin.com/company/red-eagle-public-school-prayagraj"
+                className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors duration-300"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Visit Red Eagle Public School LinkedIn page"
+              >
+                <Linkedin className="w-4 h-4" />
               </a>
             </div>
           </div>
