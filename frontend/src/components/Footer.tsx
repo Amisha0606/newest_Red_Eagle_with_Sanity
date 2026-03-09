@@ -66,6 +66,8 @@ const Footer = () => {
                 className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors duration-300"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Visit Red Eagle Public School
+                Facebook page"
               >
                 <Facebook className="w-4 h-4" />
               </a>
@@ -75,6 +77,7 @@ const Footer = () => {
                 className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors duration-300"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Visit Red Eagle Public School Instagram page"
               >
                 <Instagram className="w-4 h-4" />
               </a>
@@ -83,6 +86,7 @@ const Footer = () => {
                 className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors duration-300"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Visit Red Eagle Public School YouTube channel"
               >
                 <Youtube className="w-4 h-4" />
               </a>
@@ -91,6 +95,7 @@ const Footer = () => {
                 className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors duration-300"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Visit Red Eagle Public School LinkedIn page"
               >
                 <Linkedin className="w-4 h-4" />
               </a>
