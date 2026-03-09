@@ -14,6 +14,7 @@ import EventsListPage from "./pages/EventsListPage";
 import EventDetailPage from "./pages/EventDetailPage";
 import RulesPage from "./pages/RulesPage";
 import FeesPage from "./pages/FeesPage";
+import PublicDisclosurePage from "./pages/PublicDisclosure";
 
 function App() {
   return (
@@ -117,6 +118,16 @@ function App() {
               <>
                 <Navbar />
                 <BhopatpurBranch />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/public-disclosure"
+            element={
+              <>
+                <Navbar />
+                <PublicDisclosurePage />
                 <Footer />
               </>
             }
