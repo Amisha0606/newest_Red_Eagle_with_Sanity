@@ -68,7 +68,7 @@ const AboutPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Top Section */}
           <div className="grid lg:grid-cols-2 gap-16 items-center mb-16">
-            {/* LEFT TEXT */}
+            {/* Left Text */}
             <div>
               <div className="inline-block bg-red-50 text-red-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">
                 About Us
@@ -103,7 +103,7 @@ const AboutPage = () => {
               </p>
             </div>
 
-            {/* RIGHT IMAGES */}
+            {/* Right Images */}
             <div className="grid grid-cols-2 gap-6">
               {imageOneUrl && (
                 <img

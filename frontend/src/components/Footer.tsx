@@ -17,13 +17,13 @@ const Footer = () => {
   const quickLinks = [
     { name: "About Us", path: "/about" },
     { name: "Facilities", path: "/facilities" },
-    { name: "Toppers", path: "/toppers" },
+    // { name: "Toppers", path: "/toppers" },
     { name: "Event Gallery", path: "/eventGallery" },
   ];
 
   const importantLinks = [
-    { name: "Admission Enquiry", path: "https://forms.gle/J8GvJ5T4XjKbaQ8J8" },
-    { name: "Fee Structure", path: "/fee-structure" },
+    // { name: "Admission Enquiry", path: "https://forms.gle/J8GvJ5T4XjKbaQ8J8" },
+    // { name: "Fee Structure", path: "/fee-structure" },
     { name: "Rules & Regulations", path: "/rules" },
     { name: "Public Disclosure", path: "/public-disclosure" },
     { name: "Contact Us", path: "/contact" },
@@ -154,11 +154,24 @@ const Footer = () => {
               </li>
               <li className="flex items-start space-x-3 text-sm">
                 <Mail className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
-                <span>info@redeaglepublicschool.com</span>
+                <a
+                  href="mailto:sarveshredeagle@gmail.com"
+                  className="hover:text-red-600"
+                >
+                  <span>sarveshredeagle@gmail.com</span>
+                </a>
               </li>
               <li className="flex items-start space-x-3 text-sm">
                 <MapPin className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
-                <span>Main Campus, Red Eagle Public School</span>
+
+                <a
+                  href="https://maps.app.goo.gl/SJB95f37FMCwRE9M9"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-red-600"
+                >
+                  Main Campus, Red Eagle Public School
+                </a>
               </li>
             </ul>
           </div>
@@ -171,20 +184,6 @@ const Footer = () => {
               © {new Date().getFullYear()} Red Eagle Group of Institutions. All
               rights reserved.
             </p>
-            <div className="flex space-x-6 text-sm">
-              <Link
-                to="/privacy"
-                className="hover:text-red-400 transition-colors duration-200"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                to="/terms"
-                className="hover:text-red-400 transition-colors duration-200"
-              >
-                Terms of Service
-              </Link>
-            </div>
           </div>
         </div>
       </div>

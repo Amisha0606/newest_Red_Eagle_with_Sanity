@@ -4,8 +4,6 @@ import heroSection from './heroSection'
 import aboutSection from './aboutSection'
 import infrastructureSection from './infrastructureSection'
 import infrastructureItem from './infrastructureItem'
-import leadershipSection from './leadershipSection'
-import leader from './leader'
 import campusLifeSection from './campusLifeSection'
 import campusLifeItem from './campusLifeItem'
 import logo from './logo'
@@ -14,6 +12,7 @@ import aboutPage from './aboutPage'
 import branch from './branch'
 import feesPage from './feesPage'
 import rulesPage from './rulesPage'
+import publicDisclosure from './publicDisclosure'
 
 export const schemaTypes = [
   // Main documents
@@ -27,16 +26,11 @@ export const schemaTypes = [
   feesPage,
   rulesPage,
   infrastructureSection,
-  leadershipSection,
   campusLifeSection,
   logo,
-
-
-
-
+  publicDisclosure,
 
   // Object types (nested within documents)
   infrastructureItem,
-  leader,
   campusLifeItem,
 ]

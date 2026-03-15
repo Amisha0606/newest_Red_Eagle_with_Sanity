@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, GraduationCap, Users, Award, MapPin } from "lucide-react";
+import { ArrowRight, GraduationCap, Users, Award, MapPin, ExternalLink } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { facilities, leadership, galleryImages } from "../data/mockData";
@@ -385,7 +385,7 @@ const Home = () => {
                 variant="outline"
                 className="border-white text-white hover:bg-white hover:text-red-600 text-lg px-8 py-6"
               >
-                Contact Us
+                Contact Us <ExternalLink className="w-5 h-5 inline-block ml-2" />
               </Button>
             </Link>
           </div>

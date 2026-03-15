@@ -10,14 +10,9 @@ interface Branch {
   contactNumbers?: {
     officeIncharge?: string;
     transportIncharge?: string;
+    otherNumber?: string;
   };
   email?: string;
-  officeHours?: {
-    summer?: string;
-    winter?: string;
-    sunday?: string;
-  };
-  mapEmbedUrl?: string;
   googleMapsLink?: string;
 }
 
@@ -34,8 +29,6 @@ const ContactPage = () => {
           address,
           contactNumbers,
           email,
-          officeHours,
-          mapEmbedUrl,
           googleMapsLink
         }`;
         const data = await client.fetch(query);
@@ -182,6 +175,11 @@ const ContactPage = () => {
                                   <p>
                                     Transport Incharge:{" "}
                                     {branch.contactNumbers.transportIncharge}
+                                  </p>
+                                )}
+                                {branch.contactNumbers?.otherNumber && (
+                                  <p>
+                                    Other: {branch.contactNumbers.otherNumber}
                                   </p>
                                 )}
                               </div>
