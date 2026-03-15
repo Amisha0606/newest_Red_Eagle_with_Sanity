@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'logo',
@@ -19,17 +19,17 @@ export default defineType({
       title: 'Alt Text',
       type: 'string',
       description: 'Descriptive text for accessibility',
-      initialValue: 'Red Eagle Group of Institution Logo',
+      initialValue: 'Red Eagle Group of Institution Saidabad Handia Logo',
     }),
   ],
   preview: {
     select: {
       media: 'image',
     },
-    prepare() {
+    prepare({media}) {
       return {
-        title: 'School Logo',
-        media: this.media,
+        title: 'Red Eagle Public School Logo',
+        media,
       }
     },
   },

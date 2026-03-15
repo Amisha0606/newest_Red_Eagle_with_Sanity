@@ -39,7 +39,7 @@ const Navbar = () => {
     { name: "About", path: "/about" },
     { name: "Facilities", path: "/facilities" },
     { name: "Events", path: "/eventGallery" },
-    { name: "Toppers", path: "/toppers" },
+    // { name: "Toppers", path: "/toppers" },
     { name: "Rules", path: "/rules" },
     { name: "Public Disclosure", path: "/public-disclosure" },
     { name: "Contact", path: "/contact" },
@@ -47,7 +47,7 @@ const Navbar = () => {
 
   const branches = [
     { name: "Main Campus", path: "/" },
-    { name: "Bhopatpur - Coming Soon", path: "/bhopatpur" },
+    { name: "Bhopatpur - Classes Started", path: "/bhopatpur" },
   ];
 
   return (
@@ -197,7 +197,11 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-            <Link to="https://forms.gle/J8GvJ5T4XjKbaQ8J8" target="_blank">
+            <Link
+              to="https://forms.gle/J8GvJ5T4XjKbaQ8J8"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Button className="w-full bg-red-600 hover:bg-red-700 text-white mt-4">
                 Admission Enquiry
               </Button>

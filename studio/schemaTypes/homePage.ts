@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'homePage',
@@ -15,37 +15,32 @@ export default defineType({
       name: 'logo',
       title: 'School Logo Reference',
       type: 'reference',
-      to: [{ type: 'logo' }],
+      to: [{type: 'logo'}],
     }),
     defineField({
       name: 'hero',
       title: 'Hero Section Reference',
       type: 'reference',
-      to: [{ type: 'heroSection' }],
+      to: [{type: 'heroSection'}],
     }),
     defineField({
       name: 'about',
       title: 'About Section Reference',
       type: 'reference',
-      to: [{ type: 'aboutSection' }],
+      to: [{type: 'aboutSection'}],
     }),
     defineField({
       name: 'infrastructure',
       title: 'Infrastructure Section Reference',
       type: 'reference',
-      to: [{ type: 'infrastructureSection' }],
+      to: [{type: 'infrastructureSection'}],
     }),
-    defineField({
-      name: 'leadership',
-      title: 'Leadership Section Reference',
-      type: 'reference',
-      to: [{ type: 'leadershipSection' }],
-    }),
+
     defineField({
       name: 'campusLife',
       title: 'Campus Life Section Reference',
       type: 'reference',
-      to: [{ type: 'campusLifeSection' }],
+      to: [{type: 'campusLifeSection'}],
     }),
     defineField({
       name: 'seo',
@@ -62,7 +57,7 @@ export default defineType({
           name: 'keywords',
           title: 'Keywords',
           type: 'array',
-          of: [{ type: 'string' }],
+          of: [{type: 'string'}],
         }),
       ],
     }),

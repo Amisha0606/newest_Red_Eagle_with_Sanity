@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
-  Building2,
   Calendar,
   MapPin,
   Phone,
   Mail,
   Users,
-  ExternalLink,
   CheckCircle,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
@@ -15,7 +14,11 @@ import { leadership } from "../data/mockData";
 import client, { urlFor } from "../lib/sanityClient";
 
 const BhopatpurBranch = () => {
-  const [branchData, setBranchData] = useState(null);
+  const [branchData, setBranchData] = useState<any>({
+    architectureImages: [],
+    facilities: [],
+    contactNumbers: [],
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -33,15 +36,27 @@ const BhopatpurBranch = () => {
           architectureImages,
           facilities,
           address,
-          mapEmbedUrl,
-          phoneNumbers,
+          contactNumbers {
+    officeIncharge,
+    transportIncharge,
+    otherNumber,
+  },
           email,
           capacity,
           description,
           googleMapsLink
         }`;
         const data = await client.fetch(query);
-        setBranchData(data);
+        setBranchData({
+          ...data,
+          architectureImages: data?.architectureImages ?? [],
+          facilities: data?.facilities ?? [],
+          contactNumbers: {
+            officeIncharge: data?.contactNumbers?.officeIncharge ?? "",
+            transportIncharge: data?.contactNumbers?.transportIncharge ?? "",
+            otherNumber: data?.contactNumbers?.otherNumber ?? "",
+          },
+        });
       } catch (err) {
         console.warn("Error loading branch data:", err);
       } finally {
@@ -128,7 +143,7 @@ const BhopatpurBranch = () => {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">Location</h3>
               <p className="text-gray-600 text-sm">
-                Katahara–Damgada Road, near Mohammadabad Market, Bhopatpur
+                Kajipur (Saraibaksh), Bhopatpur, Handia, Prayagraj, 221503
               </p>
             </Card>
 
@@ -161,14 +176,23 @@ const BhopatpurBranch = () => {
       {/* Architecture Images */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-          {/* Section Title */}
-          <h3 className="text-3xl font-bold text-gray-900 text-center mb-8">
-            Campus Architecture
-          </h3>
+          <div className="text-center mb-12">
+            <div className="inline-block bg-green-50 text-green-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+              The Infrastructure
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Built for Brilliance
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Designed with purpose and built with pride — our Bhopatpur campus
+              offers a modern learning environment where every space inspires
+              growth
+            </p>
+          </div>
 
           {/* Architecture Images Grid */}
           <div className="grid md:grid-cols-2 gap-8">
-            {branchData?.architectureImages.map((arch, idx) => (
+            {(branchData?.architectureImages || []).map((arch, idx) => (
               <div
                 key={idx}
                 className="relative overflow-hidden rounded-2xl shadow-xl group h-96"
@@ -194,10 +218,129 @@ const BhopatpurBranch = () => {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Location Map Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
+            <div className="inline-block bg-green-50 text-green-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+              New Location
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Campus Location
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Visit us at our new Bhopatpur campus
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Address & Contact Info */}
+            <div>
+              <div className="bg-gray-50 rounded-2xl p-8 shadow-lg">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                  Address
+                </h3>
+                <p className="text-gray-600 text-lg mb-6 leading-relaxed">
+                  {branchData?.address ||
+                    "Katahara–Damgada Road near Mohammadabad (Daser) Market, Bhopatpur"}
+                </p>
+
+                <div className="space-y-4 mb-8">
+                  {branchData?.contactNumbers?.officeIncharge ? (
+                    <>
+                      {branchData.contactNumbers.officeIncharge && (
+                        <div className="flex items-center space-x-3">
+                          <Phone className="w-6 h-6 text-green-600 flex-shrink-0" />
+                          <div>
+                            <p className="text-sm text-gray-600">
+                              Office Incharge
+                            </p>
+                            <p className="font-semibold text-gray-900">
+                              {branchData.contactNumbers.officeIncharge}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      {branchData.contactNumbers.transportIncharge && (
+                        <div className="flex items-center space-x-3">
+                          <Phone className="w-6 h-6 text-green-600 flex-shrink-0" />
+                          <div>
+                            <p className="text-sm text-gray-600">
+                              Transport Incharge
+                            </p>
+                            <p className="font-semibold text-gray-900">
+                              {branchData.contactNumbers.transportIncharge}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                      {branchData.contactNumbers.otherNumber && (
+                        <div className="flex items-center space-x-3">
+                          <Phone className="w-6 h-6 text-green-600 flex-shrink-0" />
+                          <div>
+                            <p className="text-sm text-gray-600">
+                              Other Number
+                            </p>
+                            <p className="font-semibold text-gray-900">
+                              {branchData.contactNumbers.otherNumber}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="flex items-center space-x-3">
+                      <Phone className="w-6 h-6 text-green-600" />
+                      <div>
+                        <p className="font-semibold text-gray-900">
+                          +91 8400773055
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex items-center space-x-3 mb-8">
+                  <Mail className="w-6 h-6 text-green-600 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm text-gray-600">Email</p>
+                    <p className="font-semibold text-gray-900">
+                      {branchData?.email || "repsbhopatpure@gmail.com"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Map Embed */}
+            <div className="rounded-2xl overflow-hidden shadow-lg h-96 lg:h-full min-h-[500px]">
+              {branchData?.googleMapsLink ? (
+                <iframe
+                  src={branchData.googleMapsLink}
+                  width="100%"
+                  height="100%"
+                  style={{ border: "none" }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Bhopatpur Campus Location"
+                ></iframe>
+              ) : (
+                <p className="text-gray-500">Map not available</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <div className="inline-block bg-green-50 text-green-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+              Our Facilities
+            </div>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               World-Class Facilities
             </h2>
@@ -298,115 +441,13 @@ const BhopatpurBranch = () => {
         </div>
       </section>
 
-      {/* Location Map Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Campus Location
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Visit us at our new Bhopatpur campus
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Address & Contact Info */}
-            <div>
-              <div className="bg-gray-50 rounded-2xl p-8 shadow-lg">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                  Address
-                </h3>
-                <p className="text-gray-600 text-lg mb-6 leading-relaxed">
-                  {branchData?.address ||
-                    "Katahara–Damgada Road near Mohammadabad (Daser) Market, Bhopatpur"}
-                </p>
-
-                <div className="space-y-4 mb-8">
-                  {Array.isArray(branchData?.phoneNumbers) &&
-                  branchData.phoneNumbers.length > 0 ? (
-                    branchData.phoneNumbers.map((phone, idx) => (
-                      <div key={idx} className="flex items-center space-x-3">
-                        <Phone className="w-6 h-6 text-green-600 flex-shrink-0" />
-                        <div>
-                          <p className="text-sm text-gray-600">{phone.label}</p>
-                          <p className="font-semibold text-gray-900">
-                            {phone.number}
-                          </p>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="flex items-center space-x-3">
-                      <Phone className="w-6 h-6 text-green-600" />
-                      <div>
-                        <p className="font-semibold text-gray-900">
-                          +91 8400773055
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex items-center space-x-3 mb-8">
-                  <Mail className="w-6 h-6 text-green-600 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm text-gray-600">Email</p>
-                    <p className="font-semibold text-gray-900">
-                      {branchData?.email || "info@redeaglepublicschool.com"}
-                    </p>
-                  </div>
-                </div>
-
-                {branchData?.googleMapsLink && (
-                  <a
-                    href={branchData.googleMapsLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-colors"
-                  >
-                    <MapPin className="w-5 h-5" />
-                    <span>View on Google Maps</span>
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
-                )}
-              </div>
-            </div>
-
-            {/* Map Embed */}
-            <div className="rounded-2xl overflow-hidden shadow-lg h-96 lg:h-full min-h-[500px]">
-              {branchData?.mapEmbedUrl ? (
-                <iframe
-                  src={branchData.mapEmbedUrl}
-                  width="100%"
-                  height="100%"
-                  style={{ border: "none" }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="School Location"
-                ></iframe>
-              ) : (
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3574.908372644456!2d82.37844999999999!3d25.91289!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x398e7c8e8e8e8e8d%3A0x8e8e8e8e8e8e8e8e!2sBhopatpur!5e0!3m2!1sen!2sin!4v1234567890"
-                  width="100%"
-                  height="100%"
-                  style={{ border: "none" }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="School Location"
-                ></iframe>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Leadership Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
+            <div className="inline-block bg-green-50 text-green-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+              Our Management
+            </div>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               Leadership Team
             </h2>
@@ -430,7 +471,7 @@ const BhopatpurBranch = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <h3 className="text-2xl font-bold mb-1">{leader.name}</h3>
-                    <p className="text-red-400 font-medium">
+                    <p className="text-green-400 font-medium">
                       {leader.designation}
                     </p>
                   </div>
@@ -460,7 +501,10 @@ const BhopatpurBranch = () => {
                 <Phone className="w-6 h-6 text-red-300" />
                 <div>
                   <div className="text-sm text-red-200">Call Us</div>
-                  <div className="text-lg font-semibold">+91 8400773055</div>
+                  <div className="text-lg font-semibold">
+                    {branchData?.contactNumbers?.officeIncharge ||
+                      "+91 8400773055"}
+                  </div>
                 </div>
               </div>
               <div className="flex items-center space-x-4">
@@ -468,7 +512,7 @@ const BhopatpurBranch = () => {
                 <div>
                   <div className="text-sm text-red-200">Email Us</div>
                   <div className="text-lg font-semibold">
-                    info@redeaglepublicschool.com
+                    {branchData?.email || "repsbhopatpur.com"}
                   </div>
                 </div>
               </div>
@@ -482,12 +526,18 @@ const BhopatpurBranch = () => {
             </div>
 
             <div className="mt-8 text-center">
-              <Button
-                size="lg"
-                className="bg-white text-red-600 hover:bg-gray-100 w-full sm:w-auto"
+              <Link
+                to="https://forms.gle/J8GvJ5T4XjKbaQ8J8"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                Register Your Interest
-              </Button>
+                <Button
+                  size="lg"
+                  className="bg-white text-red-600 hover:bg-gray-100 w-full sm:w-auto"
+                >
+                  Register Your Interest
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
